@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import "./style.scss";
@@ -12,34 +12,44 @@ const Select = ({
   titleEmpty,
   label,
   type = "normal",
+  value,
+  isFormSelect = false
 }) => {
-  const [value, setValue] = useState();
+  const [selectedValue, setSelectedValue] = useState(value);
   const [collapsed, setCollapsed] = useState(true);
+
+  useEffect(() => {
+    if (isFormSelect) {
+      setSelectedValue(value);
+    }
+  }, [value, isFormSelect]);
+
   const changeValue = (newValue) => {
     onChange(newValue);
-    setValue(newValue);
-    setCollapsed(newValue);
+    setSelectedValue(newValue);
+    setCollapsed(true);
   };
+
   return (
     <div className={`SelectContainer ${type}`} data-testid="select-testid">
       {label && <div className="label">{label}</div>}
       <div className="Select">
         <ul>
           <li className={collapsed ? "SelectTitle--show" : "SelectTitle--hide"}>
-            {value || (!titleEmpty && "Toutes")}
+            {selectedValue || (!titleEmpty && "Toutes")}
           </li>
           {!collapsed && (
             <>
               {!titleEmpty && (
                 <li onClick={() => changeValue(null)}>
-                  <input defaultChecked={!value} name="selected" type="radio" />{" "}
+                  <input defaultChecked={!selectedValue} name="selected" type="radio" />{" "}
                   Toutes
                 </li>
               )}
               {selection.map((s) => (
                 <li key={s} onClick={() => changeValue(s)}>
                   <input
-                    defaultChecked={value === s}
+                    defaultChecked={selectedValue === s}
                     name="selected"
                     type="radio"
                   />{" "}
@@ -49,7 +59,7 @@ const Select = ({
             </>
           )}
         </ul>
-        <input type="hidden" value={value || ""} name={name} />
+        <input type="hidden" value={selectedValue || ""} name={name} />
         <button
           type="button"
           data-testid="collapse-button-testid"
@@ -83,19 +93,21 @@ const Arrow = () => (
 
 Select.propTypes = {
   selection: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onChange: PropTypes.func,
-  name: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
   titleEmpty: PropTypes.bool,
   label: PropTypes.string,
   type: PropTypes.string,
-}
+  value: PropTypes.string,
+  isFormSelect: PropTypes.bool,
+};
 
 Select.defaultProps = {
-  onChange: () => null,
   titleEmpty: false,
   label: "",
   type: "normal",
-  name: "select",
-}
+  value: "",
+  isFormSelect: false,
+};
 
 export default Select;
