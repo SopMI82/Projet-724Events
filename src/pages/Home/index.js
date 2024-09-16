@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import Menu from "../../containers/Menu";
 import ServiceCard from "../../components/ServiceCard";
 import EventCard from "../../components/EventCard";
@@ -13,7 +14,19 @@ import Modal from "../../containers/Modal";
 import { useData } from "../../contexts/DataContext";
 
 const Page = () => {
-  const {last} = useData()
+  // Recupération des données
+  const responseData = useData();
+  // Vérification de la disponibilité des données
+  if (!responseData || !responseData.data || !responseData.data.events) {
+    return <p>Chargement des données...</p>;
+  }
+  // Récupération des données events
+  const { data: { events } } = responseData;
+  // Tri des évenements dans une copie du tableau
+  const sortedEvents = [...events].sort((a, b) => new Date(b.date) - new Date(a.date));  console.log("Événements triés:", sortedEvents);
+  // Extraction du dernier évenement
+  const last = sortedEvents[0];
+
   return <>
     <header>
       <Menu />
