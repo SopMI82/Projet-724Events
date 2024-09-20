@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 import "./style.scss";
 
 export const FIELD_TYPES = {
-  INPUT_TEXT: 1,
-  TEXTAREA: 2,
+  INPUT_TEXT: "text",
+  TEXTAREA: "textarea",
 };
 
 const Field = ({ type = FIELD_TYPES.INPUT_TEXT, label, name, placeholder, value, onChange }) => {
@@ -18,10 +18,10 @@ const Field = ({ type = FIELD_TYPES.INPUT_TEXT, label, name, placeholder, value,
   return (
     <div className="inputField">
       <span>{label}</span>
-      {type === FIELD_TYPES.INPUT_TEXT ? (
-        <input type="text" {...inputProps} />
-      ) : (
+      {type === FIELD_TYPES.TEXTAREA ? (
         <textarea {...inputProps} />
+      ) : (
+        <input type="text" {...inputProps} />
       )}
     </div>
   );
