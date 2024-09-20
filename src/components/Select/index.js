@@ -30,8 +30,28 @@ const Select = ({
     setCollapsed(true);
   };
 
+  const toggleCollapse = (e) => {
+    e.preventDefault();
+    setCollapsed(!collapsed);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setCollapsed(!collapsed);
+    }
+  };
+
+
   return (
-    <div className={`SelectContainer ${type}`} data-testid="select-testid">
+    <div
+      className={`SelectContainer ${type}`}
+      data-testid="select-testid"
+      onClick={toggleCollapse}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+    >
       {label && <div className="label">{label}</div>}
       <div className="Select">
         <ul>
@@ -66,6 +86,7 @@ const Select = ({
           className={collapsed ? "open" : "close"}
           onClick={(e) => {
             e.preventDefault();
+            e.stopPropagation(); // Empêche la propagation de l'événement de clic
             setCollapsed(!collapsed);
           }}
         >
