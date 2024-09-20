@@ -1,20 +1,21 @@
+/* eslint-disable no-console */
+import React, { Suspense, lazy } from 'react';
 import Menu from "../../containers/Menu";
 import ServiceCard from "../../components/ServiceCard";
-import EventCard from "../../components/EventCard";
 import PeopleCard from "../../components/PeopleCard";
-
-import "./style.scss";
 import EventList from "../../containers/Events";
 import Slider from "../../containers/Slider";
 import Logo from "../../components/Logo";
 import Icon from "../../components/Icon";
 import Form from "../../containers/Form";
 import Modal from "../../containers/Modal";
-import { useData } from "../../contexts/DataContext";
 
-const Page = () => {
-  const {last} = useData()
-  return <>
+import "./style.scss";
+
+const LazyFooterEventCard = lazy(() => import('../../containers/FooterEventCard'));
+
+const Page = () => (
+  <>
     <header>
       <Menu />
     </header>
@@ -114,16 +115,9 @@ const Page = () => {
       </div>
     </main>
     <footer className="row">
-      <div className="col presta">
-        <h3>Notre derniére prestation</h3>
-        <EventCard
-          imageSrc={last?.cover}
-          title={last?.title}
-          date={new Date(last?.date)}
-          small
-          label="boom"
-        />
-      </div>
+      <Suspense fallback={<div>Chargement...</div>}>
+        <LazyFooterEventCard />
+      </Suspense>
       <div className="col contact">
         <h3>Contactez-nous</h3>
         <address>45 avenue de la République, 75000 Paris</address>
@@ -155,6 +149,6 @@ const Page = () => {
       </div>
     </footer>
   </>
-}
+)
 
 export default Page;
