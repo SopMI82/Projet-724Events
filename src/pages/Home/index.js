@@ -1,31 +1,41 @@
 /* eslint-disable no-console */
+import React, { Suspense, lazy, useEffect, useState } from 'react'; 
+import { useData } from "../../contexts/DataContext";
 import Menu from "../../containers/Menu";
 import ServiceCard from "../../components/ServiceCard";
-import EventCard from "../../components/EventCard";
 import PeopleCard from "../../components/PeopleCard";
-
-import "./style.scss";
 import EventList from "../../containers/Events";
 import Slider from "../../containers/Slider";
 import Logo from "../../components/Logo";
 import Icon from "../../components/Icon";
 import Form from "../../containers/Form";
 import Modal from "../../containers/Modal";
-import { useData } from "../../contexts/DataContext";
+
+import "./style.scss";
+
+const LazyFooterEventCard = lazy(() => import('../../containers/FooterEventCard'));
 
 const Page = () => {
-  // Recupération des données
-  const responseData = useData();
-  // Vérification de la disponibilité des données
-  if (!responseData || !responseData.data || !responseData.data.events) {
-    return <p>Chargement des données...</p>;
+  const { data, error } = useData();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (data || error) {
+      setIsLoading(false);
+    }
+  }, [data, error]);
+
+  if (isLoading) {
+    return <div>Chargement...</div>;
   }
-  // Récupération des données events
-  const { data: { events } } = responseData;
-  // Tri des évenements dans une copie du tableau
-  const sortedEvents = [...events].sort((a, b) => new Date(b.date) - new Date(a.date));  console.log("Événements triés:", sortedEvents);
-  // Extraction du dernier évenement
-  const last = sortedEvents[0];
+
+  if (error) {
+    return <div>Une erreur s&aposest produite : {error.message}</div>;
+  }
+
+  const last = data?.events?.[data.events.length - 1];
+  console.log(last);
+  
 
   return <>
     <header>
@@ -127,16 +137,9 @@ const Page = () => {
       </div>
     </main>
     <footer className="row">
-      <div className="col presta">
-        <h3>Notre derniére prestation</h3>
-        <EventCard
-          imageSrc={last?.cover}
-          title={last?.title}
-          date={new Date(last?.date)}
-          small
-          label="boom"
-        />
-      </div>
+      <Suspense fallback={<div>Chargement...</div>}>
+        <LazyFooterEventCard event={last} loading={isLoading} />
+      </Suspense>
       <div className="col contact">
         <h3>Contactez-nous</h3>
         <address>45 avenue de la République, 75000 Paris</address>
