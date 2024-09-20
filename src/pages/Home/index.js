@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
-import React, { Suspense, lazy, useEffect, useState } from 'react'; 
-import { useData } from "../../contexts/DataContext";
+import React, { Suspense, lazy } from 'react';
 import Menu from "../../containers/Menu";
 import ServiceCard from "../../components/ServiceCard";
 import PeopleCard from "../../components/PeopleCard";
@@ -15,29 +14,8 @@ import "./style.scss";
 
 const LazyFooterEventCard = lazy(() => import('../../containers/FooterEventCard'));
 
-const Page = () => {
-  const { data, error } = useData();
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (data || error) {
-      setIsLoading(false);
-    }
-  }, [data, error]);
-
-  if (isLoading) {
-    return <div>Chargement...</div>;
-  }
-
-  if (error) {
-    return <div>Une erreur s&aposest produite : {error.message}</div>;
-  }
-
-  const last = data?.events?.[data.events.length - 1];
-  console.log(last);
-  
-
-  return <>
+const Page = () => (
+  <>
     <header>
       <Menu />
     </header>
@@ -138,7 +116,7 @@ const Page = () => {
     </main>
     <footer className="row">
       <Suspense fallback={<div>Chargement...</div>}>
-        <LazyFooterEventCard event={last} loading={isLoading} />
+        <LazyFooterEventCard />
       </Suspense>
       <div className="col contact">
         <h3>Contactez-nous</h3>
@@ -171,6 +149,6 @@ const Page = () => {
       </div>
     </footer>
   </>
-}
+)
 
 export default Page;
