@@ -6,21 +6,10 @@
   color: $black;
   align-items: flex-start;
   margin: 8px;
-      position: relative;
 
   span {
     font-size: 12pt;
     margin-bottom: 4px;
-  }
-
-  .error-message {
-    color: red;
-    font-size: 1em;
-    font-weight: 600;
-    margin-top: 5px;
-    position: absolute;
-    bottom: 2px;
-    left: 16px;
   }
 }
 
@@ -41,6 +30,22 @@ input {
 
   font-family: "Manrope",
   sans-serif;
+}
+
+input,
+textarea {
+  &.error {
+    border-color: red;
+    color: red;
+
+    &::placeholder {
+      color: red;
+      opacity: 1;
+    }
+
+
+    
+  }
 }
 
 textarea {

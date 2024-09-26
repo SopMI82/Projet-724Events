@@ -9,21 +9,23 @@ export const FIELD_TYPES = {
 const Field = ({ type = FIELD_TYPES.INPUT_TEXT, label, name, placeholder, value, onChange, error }) => {
   const inputProps = {
     name,
-    placeholder,
+    placeholder: error || placeholder,
     value,
     onChange,
-    "data-testid": "field-testid"
+    "data-testid": "field-testid",
+    className: error ? "error" : ""
   };
 
   return (
     <div className="inputField">
       <span>{label}</span>
-      {type === FIELD_TYPES.TEXTAREA ? (
-        <textarea {...inputProps} />
-      ) : (
-        <input type="text" {...inputProps} />
-      )}
-      {error && <p className="error-message">{error}</p>}
+      <div className="input-container">
+        {type === FIELD_TYPES.TEXTAREA ? (
+          <textarea {...inputProps} />
+        ) : (
+          <input type="text" {...inputProps} />
+        )}
+      </div>
     </div>
   );
 };
