@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
 import "./style.scss";
@@ -17,12 +17,26 @@ const Select = ({
 }) => {
   const [selectedValue, setSelectedValue] = useState(value);
   const [collapsed, setCollapsed] = useState(true);
+  const selectRef = useRef(null);
 
   useEffect(() => {
     if (isFormSelect) {
       setSelectedValue(value);
     }
   }, [value, isFormSelect]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setCollapsed(true);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   const changeValue = (newValue) => {
     onChange(newValue);
@@ -51,6 +65,7 @@ const Select = ({
       onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
+      ref={selectRef}
     >
       {label && <div className="label">{label}</div>}
       <div className="Select">
@@ -96,7 +111,6 @@ const Select = ({
     </div>
   );
 };
-
 const Arrow = () => (
   <svg
     width="21"
