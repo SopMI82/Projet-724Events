@@ -116,7 +116,7 @@ const Form = ({ onSuccess, onError }) => {
             onChange={(e) => handleInputChange("email", e.target.value)}
             error={errors.email}
           />
-          <Button type={BUTTON_TYPES.SUBMIT} disabled={sending}>
+          <Button type={BUTTON_TYPES.SUBMIT} disabled={sending} >
             {sending ? "En cours" : "Envoyer"}
           </Button>
         </div>

@@ -13,6 +13,12 @@ describe("When Form is created", () => {
   describe("and a click is triggered on the submit button", () => {
     it("the success message is displayed", async () => {
       render(<Home />);
+      // Remplir les champs requis pour ne pas être bloqué par la fonction validateForm
+      fireEvent.change(screen.getByPlaceholderText("Votre nom"), { target: { value: "Baptiste" } });
+      fireEvent.change(screen.getByPlaceholderText("Votre prénom"), { target: { value: "Jean" } });
+      fireEvent.change(screen.getByPlaceholderText("Votre email"), { target: { value: "Jean.Baptiste@724events.com" } });
+      fireEvent.change(screen.getByPlaceholderText("Votre message"), { target: { value: "Test" } });
+
       fireEvent(
         await screen.findByText("Envoyer"),
         new MouseEvent("click", {
