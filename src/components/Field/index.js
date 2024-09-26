@@ -6,7 +6,7 @@ export const FIELD_TYPES = {
   TEXTAREA: "textarea",
 };
 
-const Field = ({ type = FIELD_TYPES.INPUT_TEXT, label, name, placeholder, value, onChange }) => {
+const Field = ({ type = FIELD_TYPES.INPUT_TEXT, label, name, placeholder, value, onChange, error }) => {
   const inputProps = {
     name,
     placeholder,
@@ -23,6 +23,7 @@ const Field = ({ type = FIELD_TYPES.INPUT_TEXT, label, name, placeholder, value,
       ) : (
         <input type="text" {...inputProps} />
       )}
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 };
@@ -34,6 +35,7 @@ Field.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func,
+  error: PropTypes.string,
 };
 
 Field.defaultProps = {
@@ -43,6 +45,7 @@ Field.defaultProps = {
   name: "field-name",
   value: "",
   onChange: () => null,
+  error: "",
 };
 
 export default Field;

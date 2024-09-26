@@ -15,12 +15,20 @@ const Form = ({ onSuccess, onError }) => {
     email: "",
     message: ""
   });
+  const [errors, setErrors] = useState({});
 
   const handleInputChange = (name, value) => {
     setFormData(prevData => ({
       ...prevData,
       [name]: value
     }));
+    // Effacer l'erreur lorsque l'utilisateur commence à taper
+    if (errors[name]) {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        [name]: ""
+      }));
+    }
   };
 
   const resetForm = () => {
@@ -31,11 +39,32 @@ const Form = ({ onSuccess, onError }) => {
       email: "",
       message: ""
     });
+    setErrors({});
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.nom) newErrors.nom = "Ce champ est requis";
+    if (!formData.prenom) newErrors.prenom = "Ce champ est requis";
+    if (!formData.email) {
+      newErrors.email = "Ce champ est requis";
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        newErrors.email = "Adresse email invalide";
+      }
+    }
+    if (!formData.message) newErrors.message = "Ce champ est requis";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const sendContact = useCallback(
     async (evt) => {
       evt.preventDefault();
+      if (!validateForm()) return;
+
       setSending(true);
       try {
         await mockContactApi();
@@ -47,7 +76,7 @@ const Form = ({ onSuccess, onError }) => {
         onError(err);
       }
     },
-    [onSuccess, onError]
+    [onSuccess, onError, formData]
   );
 
   return (
@@ -55,18 +84,20 @@ const Form = ({ onSuccess, onError }) => {
       <div className="row">
         <div className="col">
           <Field
-            placeholder=""
+            placeholder="Votre nom"
             label="Nom"
             name="nom"
             value={formData.nom}
             onChange={(e) => handleInputChange("nom", e.target.value)}
+            error={errors.nom}
           />
           <Field
-            placeholder=""
+            placeholder="Votre prénom"
             label="Prénom"
             name="prenom"
             value={formData.prenom}
             onChange={(e) => handleInputChange("prenom", e.target.value)}
+            error={errors.prenom}
           />
           <Select
             selection={["Personel", "Entreprise"]}
@@ -78,11 +109,12 @@ const Form = ({ onSuccess, onError }) => {
             isFormSelect
           />
           <Field
-            placeholder=""
+            placeholder="Votre email"
             label="Email"
             name="email"
             value={formData.email}
             onChange={(e) => handleInputChange("email", e.target.value)}
+            error={errors.email}
           />
           <Button type={BUTTON_TYPES.SUBMIT} disabled={sending}>
             {sending ? "En cours" : "Envoyer"}
@@ -90,12 +122,13 @@ const Form = ({ onSuccess, onError }) => {
         </div>
         <div className="col">
           <Field
-            placeholder="message"
+            placeholder="Votre message"
             label="Message"
             type={FIELD_TYPES.TEXTAREA}
             name="message"
             value={formData.message}
             onChange={(e) => handleInputChange("message", e.target.value)}
+            error={errors.message}
           />
         </div>
       </div>
