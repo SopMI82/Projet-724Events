@@ -20,7 +20,7 @@ describe("When Events is created", () => {
       fireEvent.change(screen.getByPlaceholderText("Votre prénom"), { target: { value: "Jean" } });
       fireEvent.change(screen.getByPlaceholderText("Votre email"), { target: { value: "Jean.Baptiste@724events.com" } });
       fireEvent.change(screen.getByPlaceholderText("Votre message"), { target: { value: "Test" } });
-
+// simuler l'envoi du formulaire
       fireEvent(
         await screen.findByTestId("button-test-id"),
         new MouseEvent("click", {
@@ -28,9 +28,17 @@ describe("When Events is created", () => {
           bubbles: true,
         })
       );
+      // afficher "en cours" pendant l'envoi du formulaire
       await screen.findByText("En cours");
+      // afficher "envoyé" une fois le formulaire envoyé
       await screen.findByText("Envoyer");
+      // vérifier que la fonction onSuccess a bien été appelée
       expect(onSuccess).toHaveBeenCalled();
+      // Vérifier que tous les champs sont vides une fois le formulaire soumis
+      expect(screen.getByPlaceholderText("Votre nom")).toHaveValue('');
+      expect(screen.getByPlaceholderText("Votre prénom")).toHaveValue('');
+      expect(screen.getByPlaceholderText("Votre email")).toHaveValue('');
+      expect(screen.getByPlaceholderText("Votre message")).toHaveValue('');
     });
   });
 });
