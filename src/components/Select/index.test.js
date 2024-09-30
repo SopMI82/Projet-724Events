@@ -41,6 +41,7 @@ describe("When a select is created", () => {
       expect(choice1).toBeInTheDocument();
       expect(choice2).toBeInTheDocument();
     });
+    
     describe("and a click is triggered on a choice item", () => {
       it("a onChange callback is called", () => {
         const onChange = jest.fn();

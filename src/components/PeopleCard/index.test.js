@@ -12,7 +12,7 @@ describe("When a people card is created", () => {
     expect(imageElement).toBeInTheDocument();
     expect(imageElement.alt).toEqual("image-alt-text");
   });
-  it("a title and a month are displayed", () => {
+  it("a name and a function are displayed", () => {
     render(
       <PeopleCard
         imageSrc="http://src-image"

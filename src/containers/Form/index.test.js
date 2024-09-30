@@ -53,7 +53,7 @@ describe("Form Component", () => {
     });
 
     it("shows 'En cours' during submission and 'Envoyer' after", async () => {
-      // Vérifie le changement sur le bouton "envoyer" au fil de l'exécution de "onSuccess"
+      // Vérifie le changement sur le bouton "envoyer" au fil de l'exécution de "onSuccess" (ajout du retour à "envoyer")
       await submitForm();
       expect(await screen.findByText("En cours")).toBeInTheDocument();
       expect(await screen.findByText("Envoyer")).toBeInTheDocument();
