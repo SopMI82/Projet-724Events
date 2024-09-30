@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import Home from "./index";
 
 describe("When Form is created", () => {
+  // cette fonctionalité est déjà testée dans le composant Form, pourquoi un deuxième test ?
   it("a list of fields card is displayed", async () => {
     render(<Home />);
     await screen.findByText("Email");
@@ -26,13 +27,12 @@ describe("When Form is created", () => {
           bubbles: true,
         })
       );
-      await screen.findByText("En cours");
-      await screen.findByText("Message envoyé !");
+      await screen.findByText("En cours"); // dejà testé dans form
+      await screen.findByText("Message envoyé !"); // a tester ici car la modale est gérée par le composant Home
     });
   });
 
 });
-
 
 describe("When a page is created", () => {
   it("a list of events is displayed", () => {
