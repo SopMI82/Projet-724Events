@@ -53,7 +53,7 @@ const Slider = () => {
                   type="radio"
                   name="radio-button"
                   onClick={() => setIndex(radioIdx)}
-                  defaultChecked={index === radioIdx} // l'ajout de default avant checked permet que le bouton se coche quand on le clique
+                  checked={index === radioIdx}
                 />
               ))}
             </div>
