@@ -34,15 +34,16 @@ const FooterEventCard = () => {
 
 
     return (
-        <div className="col presta">
+        <div className="col presta" >
             <h3>Notre dernière prestation</h3>
-                <EventCard
-                    imageSrc={lastEvent.cover}
-                    title={lastEvent.title}
-                    date={new Date(lastEvent.date)}
-                    small
-                    label={lastEvent.type}
-                />
+            <EventCard
+                imageSrc={lastEvent.cover}
+                title={lastEvent.title}
+                date={new Date(lastEvent.date)}
+                small
+                label={lastEvent.type}
+                data-testid="small-event-card"
+            />
         </div>
     );
 };

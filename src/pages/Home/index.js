@@ -114,7 +114,7 @@ const Page = () => (
         </Modal>
       </div>
     </main>
-    <footer className="row">
+    <footer className="row" data-testId="footer-testid">
       <Suspense fallback={<div>Chargement...</div>}>
         <LazyFooterEventCard />
       </Suspense>

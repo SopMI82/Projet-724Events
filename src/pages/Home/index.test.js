@@ -1,7 +1,19 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import Home from "./index";
+import { DataProvider, useData } from "../../contexts/DataContext";
+
+jest.mock("../../contexts/DataContext", () => ({ // mockage des données pour le 2eme groupe de tests
+  ...jest.requireActual("../../contexts/DataContext"),
+  useData: jest.fn(),
+}));
 
 describe("When Form is created", () => {
+  beforeEach(() => { // permet d'ignorer les données mockées pour cet ensemble de tests car cela créait un conflit
+    useData.mockReturnValue({
+      data: null,
+      error: null,
+    });
+  });
   // cette fonctionalité est déjà testée dans le composant Form, pourquoi un deuxième test ?
   it("a list of fields card is displayed", async () => {
     render(<Home />);
@@ -35,16 +47,57 @@ describe("When Form is created", () => {
 });
 
 describe("When a page is created", () => {
+  beforeEach(() => {
+    useData.mockReturnValue({
+      data: {
+        events: [
+          {
+            cover: "/images/event1.png",
+            title: "Event 1",
+            date: "2023-10-01T00:00:00Z",
+            type: "Conference",
+          },
+          {
+            cover: "/images/event2.png",
+            title: "Event 2",
+            date: "2023-09-01T00:00:00Z",
+            type: "Workshop",
+          },
+        ],
+      },
+      error: null,
+    });
+    render(
+      <DataProvider>
+        <Home />
+      </DataProvider>
+    );
+  });
+
   it("a list of events is displayed", () => {
-    // to implement
+    const eventList = screen.getByTestId(`event-list`);
+    expect(eventList).toBeInTheDocument();
   })
   it("a list a people is displayed", () => {
-    // to implement
+    const peopleCard = screen.getAllByTestId(`people-card-testid`);
+    expect(peopleCard.length).toBeGreaterThan(0);
   })
   it("a footer is displayed", () => {
-    // to implement
+    const footer = screen.getByTestId(`footer-testid`);
+    expect(footer).toBeInTheDocument();
   })
-  it("an event card, with the last event, is displayed", () => {
-    // to implement
-  })
+  it("an event card, with the last event, is displayed", async () => {
+    const dernierePrestation = await screen.findByTestId(`small-event-card`);
+    expect(dernierePrestation).toBeInTheDocument();
+    expect(dernierePrestation).toHaveClass('EventCard--small');
+
+    const titre = await within(dernierePrestation).findByText(`Event 1`);
+    expect(titre).toBeInTheDocument();
+
+    const date = await within(dernierePrestation).findByText(`octobre`);
+    expect(date).toBeInTheDocument();
+
+    const image = await within(dernierePrestation).findByRole('img');
+    expect(image).toHaveAttribute('src', '/images/event1.png');
+  });
 });
