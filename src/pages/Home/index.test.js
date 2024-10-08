@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import Home from "./index";
 import { DataProvider, useData } from "../../contexts/DataContext";
 
@@ -89,5 +89,15 @@ describe("When a page is created", () => {
   it("an event card, with the last event, is displayed", async () => {
     const dernierePrestation = await screen.findByTestId(`small-event-card`);
     expect(dernierePrestation).toBeInTheDocument();
+    expect(dernierePrestation).toHaveClass('EventCard--small');
+
+    const titre = await within(dernierePrestation).findByText(`Event 1`);
+    expect(titre).toBeInTheDocument();
+
+    const date = await within(dernierePrestation).findByText(`octobre`);
+    expect(date).toBeInTheDocument();
+
+    const image = await within(dernierePrestation).findByRole('img');
+    expect(image).toHaveAttribute('src', '/images/event1.png');
   });
 });
