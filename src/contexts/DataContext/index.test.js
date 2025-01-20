@@ -14,7 +14,7 @@ describe("When a data context is created", () => {
       </DataProvider>
     );
     const dataDisplayed = await screen.findByText("ok");
-    expect(dataDisplayed).toBeInTheDocument();
+    expect(dataDisplayed).toBeInTheDocument(); 
   });
   describe("and the events call failed", () => {
     it("the error is dispatched", async () => {

@@ -1,3 +1,6 @@
 .SelectTitle {
   color: white;
 }
+.Select{
+  cursor: pointer;
+}
