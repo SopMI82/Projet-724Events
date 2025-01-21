@@ -34,7 +34,7 @@ const EventList = () => {
   const typeList = new Set(data?.events.map((event) => event.type));
 
 
-  
+
   return (
     <>
       {error && <div>An error occured</div>}
@@ -47,7 +47,7 @@ const EventList = () => {
             selection={Array.from(typeList)}
             onChange={(value) => (value ? changeType(value) : changeType(null))}
           />
-            <div id="events" className="ListContainer" data-testId="event-list">
+          <div id="events" className="ListContainer" data-testId="event-list">
             {filteredEvents.map((event) => (
               <Modal key={event.id} Content={<ModalEvent event={event} />}>
                 {({ setIsOpened }) => (
