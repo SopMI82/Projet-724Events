@@ -74,10 +74,23 @@ describe("When a page is created", () => {
     );
   });
 
-  it("a list of events is displayed", () => {
+  it("a list of events is displayed withs details on the event", () => {
     const eventList = screen.getByTestId(`event-list`);
     expect(eventList).toBeInTheDocument();
-  })
+
+    const eventCard = within(eventList).getAllByTestId('card-testid');
+    expect(eventCard.length).toBe(2);
+
+    const firstEventImage = within(eventCard[1]).getByTestId('card-image-testid');
+    expect(firstEventImage).toHaveAttribute("src", "/images/event2.png");
+
+    const firstEventTitle = eventCard[1].querySelector('.EventCard__title');
+    expect(firstEventTitle.textContent).toBe("Event 2");
+
+    const firstEventDate = eventCard[1].querySelector('.EventCard__month');
+    expect(firstEventDate.textContent).toBe("septembre");
+  });
+
   it("a list a people is displayed", () => {
     const peopleCard = screen.getAllByTestId(`people-card-testid`);
     expect(peopleCard.length).toBeGreaterThan(0);
@@ -86,7 +99,7 @@ describe("When a page is created", () => {
     const footer = screen.getByTestId(`footer-testid`);
     expect(footer).toBeInTheDocument();
   })
-  it("an event card, with the last event, is displayed", async () => {
+  it("an event card, with the last event, is displayed with details", async () => {
     const dernierePrestation = await screen.findByTestId(`small-event-card`);
     expect(dernierePrestation).toBeInTheDocument();
     expect(dernierePrestation).toHaveClass('EventCard--small');
