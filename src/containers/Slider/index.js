@@ -31,7 +31,7 @@ const Slider = () => {
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
-        <React.Fragment key={event.id}>
+        <React.Fragment key={event.title}>
           <div
             className={`SlideCard SlideCard--${index === idx ? "display" : "hide"}`}
           >
@@ -48,7 +48,7 @@ const Slider = () => {
             <div key={`pagination-${index}`} className="SlideCard__pagination">
               {byDateDesc.map((radioEvent, radioIdx) => (
                 <input
-                  key={`radio-${radioEvent.id}`}
+                  key={`radio-${radioEvent.title}`}
                   type="radio"
                   name="radio-button"
                   onChange={() => handleBulletClick(radioIdx)}
